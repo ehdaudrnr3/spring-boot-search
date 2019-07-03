@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<!-- Bootstrap core CSS -->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!-- Custom fonts for this template -->
+	<link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+	
+	<!-- Custom styles for this template -->	
+	<link href="css/resume.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e6866ee9b5f328e3b8e899d69b6f364e&libraries=clusterer"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<title>Place Search Page</title>
+	<style>
+		.customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+		.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+		.customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+		.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
+		.customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+	</style>
+</head>
+
+<body id="page-top">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+	    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+	      <span class="d-block d-lg-none"></span>
+	      <span class="d-none d-lg-block">
+	      </span>
+	    </a>
+	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link js-scroll-trigger" href="#home">Home</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link js-scroll-trigger" href="#placeSearch">Place Search</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link js-scroll-trigger" href="#history">History</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link js-scroll-trigger" href="#rank">Rank</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link js-scroll-trigger" href="#map">Map</a>
+	        </li>
+	      </ul>
+	    </div>
+  	</nav>
+  	<div class="container-fluid p-0">
+  		<section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="home">
+	      <div class="w-100">
+        	<div style="float:right;margin-top:15px;">
+        		<button class="btn btn-outline-warning" id="btnLogout">LOGOUT</button>
+        		<a href="/logout" id="logout" style="display:none"></a>
+        	</div>
+        	<h2 class="mb-5" th:text="${param.message}"></h2>
+	        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
+	          <div class="resume-content">
+	            <h3 class="mb-0" style="height:120px;">서비스 목록</h3>
+	            <div class="subheading mb-3">장소 검색</div>
+	            <p>키워드를 통해 장소를 입력하고 검색 서비스를 제공합니다. 각 검색에 대한 상세정보를 제공합니다.</p>
+	            <div class="subheading mb-3">나의 검색 목록</div>
+	            <p>장소 검색에서 검색한 내역에 대한 정보를 제공합니다.</p>
+	            <div class="subheading mb-3">인기 키워드 목록</div>
+	            <p>사용자들이 많이 검색한 순서대로, 최대 10개의 검색 키워드를 제공합니다.</p>
+	          </div>
+	          <div class="resume-date text-md-right">
+	            <span class="text-primary" th:text="${param.date}"></span>
+	          </div>
+	        </div>
+	      </div>
+    	</section>
+
+    	<hr class="m-0">
+    	
+    	<section class="resume-section p-3 p-lg-5 d-flex justify-content-center" style="min-width: 77rem;"id="placeSearch">
+	      <div class="w-100">
+	        <h2 class="mb-5">Place Search Service</h2>
+	        <div style="margin-bottom:20px;">
+	        	<input type="text" class="form-control" style="width: 1000px;float:left" id="keyword" placeholder="검색할 장소를 입력하세요."/>
+				<button class="btn btn-outline-warning" style="margin-left: 10px;" id="btnPlaceSearch">검색</button>
+			</div>
+			<div>
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col" style="display:none">id</th>
+				      <th scope="col">주소명</th>
+				      <th scope="col">전화번호</th>
+				      <th scope="col">장소명</th>
+				      <th scope="col">도로주소명</th>
+				      <th scope="col">URL</th>
+				      <th scope="col">지도</th>
+				    </tr>
+				  </thead>
+				  <tbody id="placeGrid">
+				  </tbody>
+				</table>
+			</div>
+			<div>
+				<ul class="pagination justify-content-center" id="placePagination">
+			  	</ul>
+			 </div>
+	      </div>
+    	</section>
+    	
+    	<hr class="m-0">
+    	
+    	<section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="history">
+	      <div class="w-100">
+	        <h2 class="mb-5">History Service</h2>
+	        <div style="text-align:right;">
+	        	<button class="btn btn-outline-warning" style="margin-bottom:20px;" id="btnHistorySearch">조회</button>
+			</div>
+			<div style="overflow:auto;height: 600px;">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col" style="display:none">uid</th>
+				      <th scope="col">검색어</th>
+				      <th scope="col">검색일자</th>
+				    </tr>
+				  </thead>
+				  <tbody id="historyGrid">
+				  </tbody>
+				</table>
+			</div>
+			<div>
+				<ul class="pagination justify-content-center" id="historyPagination">
+			  	</ul>
+			 </div>
+	      </div>
+    	</section>
+		
+		<hr class="m-0">
+    	
+    	<section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="rank">
+	      <div class="w-100">
+	        <h2 class="mb-5">Keyword Rank Service</h2>
+	        <button class="btn btn-outline-warning" style="float:right;margin-bottom:20px;" id="btnRankSearch">조회</button>
+			<div>
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">순위</th>
+				      <th scope="col">검색어</th>
+				      <th scope="col">검색횟수</th>
+				    </tr>
+				  </thead>
+				  <tbody id="rankGrid">
+				  </tbody>
+				</table>
+			</div>
+			<div>
+				<ul class="pagination justify-content-center" id="rankPagination">
+			  	</ul>
+			 </div>
+	      </div>
+    	</section>
+    	
+    	<hr class="m-0">
+    	
+    	<section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="map">
+	      <div class="w-100">
+	        <h2 class="mb-5">Map</h2>
+	        <div id="kakaoMap" style="width:600px;height:500px;"></div>
+	      </div>
+    	</section>
+  	</div>
+</body>
+<script src="js/common.js"></script>
+<script src="js/placeSearch.js"></script>
+<script src="js/history.js"></script>
+<script src="js/rank.js"></script>
+<script src="js/map.js"></script>
+</html>
