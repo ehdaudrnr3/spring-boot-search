@@ -8,3 +8,8 @@ http://bootstrapk.com/components/#btn-dropdowns<br/>
 활용목적 : 부트스트랩의 SPA 컴포넌트를 구현하기 위해 활용<br/>
 https://bootsnipp.com/snippets/vl4R7 <br/>
 활용목적 : 로그인 페이지 템플릿 활용 <br/>
+https://developers.kakao.com/
+활용목적 : 카카오 API를 사용 <br />
+
+오픈소스
+spring boot, JPA
