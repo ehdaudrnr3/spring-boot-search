@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.search.service.domain.Account;
+import com.search.service.domain.User;
 import com.search.service.repository.UserRepository;
 
 @SpringBootApplication
@@ -21,8 +21,8 @@ public class SpringBootSearchApplication {
 	@Bean
 	InitializingBean saveUser(UserRepository repository, PasswordEncoder passwordEncoder) { 
 		return () -> {
-			repository.save(new Account("ryan", passwordEncoder.encode("1234")));
-			repository.save(new Account("muzi", passwordEncoder.encode("1111")));
+			repository.save(new User("ryan", passwordEncoder.encode("1234")));
+			repository.save(new User("muzi", passwordEncoder.encode("1111")));
 		};
 	}
 }
