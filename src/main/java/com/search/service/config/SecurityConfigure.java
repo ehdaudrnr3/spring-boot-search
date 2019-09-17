@@ -1,5 +1,6 @@
 package com.search.service.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -7,29 +8,39 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.search.service.login.AuthFailureHandler;
+import com.search.service.login.AuthProvider;
 
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	AuthProvider authProvider;
+	
+	@Autowired
+	AuthFailureHandler authFailureHandler;
+	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/resources/**", "/static/**", "/templates/**");
+		web.ignoring().antMatchers("/resources/**");
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable();
 		http.authorizeRequests()
-				.antMatchers("/login", "/api/**", "/", "/home").permitAll()
+				.antMatchers("/").authenticated()
+				.antMatchers("/api/**").authenticated()
 				.and()
 			.formLogin()
 				.loginPage("/login")
 				.usernameParameter("userId")
-				.successForwardUrl("/home")
+				.failureHandler(authFailureHandler)
+				.failureUrl("/login?error=true")
 				.and()
 			.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/");
+				.permitAll()
+			.and().authenticationProvider(authProvider);
 	}
 	
 	@Bean

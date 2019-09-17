@@ -60,9 +60,10 @@
   	<div class="container-fluid p-0">
   		<section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="home">
 	      <div class="w-100">
-        	<div style="float:right;margin-top:15px;">
-        		<button class="btn btn-outline-warning" id="btnLogout">LOGOUT</button>
-        		<a href="/logout" id="logout" style="display:none"></a>
+        	<div style="float:right;margin-top:15px;" sec:authorize="isAuthenticated()">
+        		<form th:action="@{logout}" method="post">
+					<button type="submit" class="btn btn-outline-warning" id="btnLogout">LOGOUT</button>
+				</form>
         	</div>
         	<h2 class="mb-5" th:text="${param.message}"></h2>
 	        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
